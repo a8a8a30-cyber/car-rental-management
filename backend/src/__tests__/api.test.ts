@@ -7,10 +7,17 @@ afterAll(() => {
 });
 
 describe('GET /', () => {
-    it('returns API welcome message', async () => {
+    it('returns API welcome message with links', async () => {
         const res = await request(app).get('/');
         expect(res.status).toBe(200);
         expect(res.body.message).toBe('Car Rental Management API');
+        expect(res.body).toHaveProperty('frontend');
+        expect(res.body).toHaveProperty('api');
+        expect(res.body).toHaveProperty('endpoints');
+        expect(res.body.endpoints).toHaveProperty('vehicles');
+        expect(res.body.endpoints).toHaveProperty('contracts');
+        expect(res.body.endpoints).toHaveProperty('maintenance');
+        expect(res.body.endpoints).toHaveProperty('analytics');
     });
 });
 

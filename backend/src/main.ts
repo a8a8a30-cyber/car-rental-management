@@ -8,10 +8,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const PORT = process.env.PORT || 5000;
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+const apiBaseUrl = process.env.API_BASE_URL || `http://localhost:${PORT}`;
+
 const app = express();
 const server = http.createServer(app);
-
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 const io = new Server(server, {
     cors: { origin: frontendUrl }
@@ -63,7 +65,17 @@ const maintenanceRecords: MaintenanceRecord[] = [
 
 // Routes
 app.get('/', (_req, res) => {
-    res.json({ message: 'Car Rental Management API' });
+    res.json({
+        message: 'Car Rental Management API',
+        frontend: frontendUrl,
+        api: `${apiBaseUrl}/api`,
+        endpoints: {
+            vehicles: `${apiBaseUrl}/api/vehicles`,
+            contracts: `${apiBaseUrl}/api/contracts`,
+            maintenance: `${apiBaseUrl}/api/maintenance`,
+            analytics: `${apiBaseUrl}/api/analytics`,
+        },
+    });
 });
 
 app.get('/api/vehicles', (_req, res) => {
@@ -115,9 +127,11 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`\n🚗 Car Rental Management API`);
+    console.log(`⚙️  Backend API:  ${apiBaseUrl}`);
+    console.log(`🔌 API Endpoints: ${apiBaseUrl}/api`);
+    console.log(`🖥️  Frontend:     ${frontendUrl}\n`);
 });
 
 export { app, server };
