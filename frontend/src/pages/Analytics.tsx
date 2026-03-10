@@ -1,12 +1,11 @@
-import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getAnalyticsData } from '../services/api';
 
 const Analytics = () => {
-  const { data, error, isLoading } = useQuery('analytics', getAnalyticsData);
+  const { data, error, isLoading } = useQuery({ queryKey: ['analytics'], queryFn: getAnalyticsData });
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error occurred: {error.message}</div>;
+  if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
   return (
     <div>
