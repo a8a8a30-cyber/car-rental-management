@@ -1,12 +1,11 @@
-import React from 'react';
 import { getVehicles } from '../services/api';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 const Dashboard = () => {
-  const { data, error, isLoading } = useQuery('vehicles', getVehicles);
+  const { data, error, isLoading } = useQuery({ queryKey: ['vehicles'], queryFn: getVehicles });
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error occurred: {error.message}</div>;
+  if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
   return (
     <div>
